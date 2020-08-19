@@ -1,26 +1,89 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const myTodos = [
+  { id: 1, description: "Create a new todo", completed: false },
+  { id: 2, description: "Update an existing todo", completed: false },
+  { id: 3, description: "Delete an existing todo", completed: false }
+]
+
+// this is a bad way to make IDs. Demo purposes only!
+const getNextId = (id => () => ++id)(3)
+
+class App extends React.Component {
+  state = {
+    todos: myTodos,
+    newTodoDescription: ""
+  }
+
+  createTodo = e => {
+    e.preventDefault()
+    const newTodo = {
+      id: getNextId(),
+      description: this.state.newTodoDescription,
+      completed: false
+    }
+    console.log(newTodo)
+
+    // TODO: add the new Todo to the list in state
+    // make sure not to mutate the existing array!
+
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    })
+  }
+
+  deleteTodo = id => {
+    console.log(id)
+
+    // TODO: remove ONE todo from state using the id
+    // make sure not to mutate the existing array!
+
+    this.setState({
+      todos: this.state.todos.filter(todo => todo.id !== id)
+    })
+  }
+
+  updateTodo = (id, completed) => {
+    console.log(id, completed)
+
+    // TODO: update ONE todo in state using the id
+    // make sure not to mutate the existing array!
+    // also, make sure not to mutate any objects within the array!
+
+    this.setState({
+      todos: this.state.todos.map(todo => todo.id === id ? { ...todo, completed } : todo)
+    })
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h2>Add Todos</h2>
+        <form onSubmit={this.createTodo}>
+          <label>
+            Description:
+            <input type="text" value={this.state.newTodoDescription} onChange={e => this.setState({ newTodoDescription: e.target.value })} />
+          </label>
+          <input type="submit" value="Add todo" />
+        </form>
+        <h2>My Todos</h2>
+        <ul>
+          {this.state.todos.map(todo => (
+            <li key={todo.id}>
+              <strong>
+                {todo.description}
+              </strong>
+              <label>
+                Completed? <input type="checkbox" onChange={e => this.updateTodo(todo.id, e.target.checked)} checked={todo.completed} />
+              </label>
+              <button onClick={() => this.deleteTodo(todo.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default App;

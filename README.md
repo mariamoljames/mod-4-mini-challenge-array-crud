@@ -1,68 +1,111 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Mini Challenge: setState with Arrays
 
-## Available Scripts
+## Instructions
 
-In the project directory, you can run:
+Fork this repo, then run `git clone` to download it locally. Then `cd` into the downloaded directory and open it in your text editor with `code .`.
 
-### `yarn start`
+To get started, run:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+npm install
+npm start
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Submitting
 
-### `yarn test`
+When you’re finished, run the following commands in your terminal to submit:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+git add .
+git commit -m 'Done'
+git push
+```
 
-### `yarn build`
+To get feedback on your code, make a [pull request from your forked repo](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork).
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Assignment
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+We're working a very simple todo app to give you some practice working with arrays in state. Most of the code is set up for you, so that all that's left for you is to use `setState` inside the `createTodo`, `deleteTodo`, and `updateTodo` methods. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Make sure you aren't mutating the original array when you're setting state! Also make sure you aren't mutating any objects within the array.
 
-### `yarn eject`
+## Tips
+If you're stuck, have a look at these methods for working with arrays:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+- [.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+- [.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If you want more help, check out these common strategies for updating arrays in state *without* mutating the original array.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Adding to an array
+- Use the spread operator!
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```js
+addComment = newComment => {
+  // spread to create a new array and add new comment at the end
+  const updatedComments = [...this.state.comments, newComment] 
 
-## Learn More
+  this.setState({ 
+    comments: updatedComments
+  })
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Removing from an array
+- Use filter!
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```js
+removeComment = commentId => {
+  // filter to return a new array with the comment we don't want removed
+  const updatedComments = this.state.comments.filter(comment => comment.id !== commentId) 
 
-### Code Splitting
+  this.setState({ 
+    comments: updatedComments
+  })
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Updating an item in an array
+- Use map!
 
-### Analyzing the Bundle Size
+```js
+updateComment = updatedComment => {
+  // filter to return a new array with the comment we don't want removed
+  const updatedComments = this.state.comments.map(comment => {
+    if (comment.id === updatedComment.id) {
+      // if the comment in state is the one we want to update, replace it with the new updated object
+      return updatedComment
+    } else {
+      // otherwise return the original object
+      return comment
+    }
+  }) 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+  this.setState({ 
+    comments: updatedComments
+  })
+}
+```
 
-### Making a Progressive Web App
+If you only want to update one attribute instead of replacing the whole object:
+```js
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+  // updating one object in an array
+  handleUpdateCustomer = (id, name) => {
+    // use map to return a new array so we aren't mutating state
+    const updatedCustomers = this.state.customers.map(customer => {
+      // in the array, look for the object we want to update
+      if (customer.id === id){ // if we find the object
+        const updatedCustomer = { ...customer } // make a copy of it
+        updateCustomer.name = name // update whatever attribute have changed
+        return updatedCustomer // return the updated copy
+      } else { // for all other objects in the array
+        return customer // return the original object
+      }
+    })
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    // set state with our updated array
+    this.setState({ customers: updatedCustomers })
+  }  
+```

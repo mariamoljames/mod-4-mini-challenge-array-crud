@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+form > * {
+  margin: 1rem;
+}
+
+li {
+  width: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+li > * {
+  margin: 1rem;
+  width: 33%;
+}
