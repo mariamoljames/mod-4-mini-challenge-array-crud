@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 
 const myTodos = [
   { id: 1, description: "Create a new todo", completed: false },
@@ -19,41 +18,29 @@ class App extends React.Component {
   createTodo = e => {
     e.preventDefault()
     const newTodo = {
-      id: getNextId(),
+      id: getNextId(), // use our id generator fn to assign a new ID since we don't have a database
       description: this.state.newTodoDescription,
       completed: false
     }
-    console.log(newTodo)
+    console.log("createTodo", newTodo)
 
     // TODO: add the new Todo to the list in state
     // make sure not to mutate the existing array!
-
-    this.setState({
-      todos: [...this.state.todos, newTodo]
-    })
   }
 
   deleteTodo = id => {
-    console.log(id)
+    console.log("deleteTodo", id)
 
     // TODO: remove ONE todo from state using the id
     // make sure not to mutate the existing array!
-
-    this.setState({
-      todos: this.state.todos.filter(todo => todo.id !== id)
-    })
   }
 
   updateTodo = (id, completed) => {
-    console.log(id, completed)
+    console.log("updateTodo", id, completed)
 
     // TODO: update ONE todo in state using the id
     // make sure not to mutate the existing array!
     // also, make sure not to mutate any objects within the array!
-
-    this.setState({
-      todos: this.state.todos.map(todo => todo.id === id ? { ...todo, completed } : todo)
-    })
   }
 
   render() {
